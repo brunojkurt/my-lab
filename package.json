@@ -1,0 +1,27 @@
+{
+  "name": "my-lab",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brunojkurt/my-lab.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brunojkurt/my-lab/issues"
+  },
+  "homepage": "https://github.com/brunojkurt/my-lab#readme",
+  "dependencies": {
+    "antd": "^4.8.5",
+    "next": "^10.0.3",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  }
+}
