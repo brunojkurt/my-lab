@@ -13,7 +13,7 @@ const TimeAgo = (props) => {
     }
     
     if(live) {
-      const updateInterval = setInterval(updateElapsedTime, interval || 10000)
+      const updateInterval = setInterval(updateElapsedTime, interval || 60000)
       return () => clearInterval(updateInterval)
     }
 
