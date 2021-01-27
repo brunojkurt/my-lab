@@ -33,8 +33,8 @@ const Fields = () => {
     <div style={{ width: '500px', height: '300px', margin: '50px', background: '#ccc' }}>
       <ul>
         { fields.map(input => (
-          <li>
-            <input key={input.id} onChange={(e) => handleTyping(input.id, e.target.value)} value={input.value} />
+          <li key={input.id}>
+            <input onChange={(e) => handleTyping(input.id, e.target.value)} value={input.value} />
           </li>
         ))}
       </ul>
