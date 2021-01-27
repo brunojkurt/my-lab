@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function Fields() {
+const Fields = () => {
   const [ fields, setFields ] = useState([
     {
       id: new Date().getTime() + Math.random(),
