@@ -1,22 +1,30 @@
 import Document from 'next/document'
-import { resetServerContext } from 'react-beautiful-dnd'
+import { ServerStyleSheet } from 'styled-components'
 
-class MyDocument extends Document {
+export default class MyDocument extends Document {
   static async getInitialProps(ctx) {
-    resetServerContext()
-
+    const sheet = new ServerStyleSheet()
     const originalRenderPage = ctx.renderPage
 
-    ctx.renderPage = () =>
-      originalRenderPage({
-        enhanceApp: (App) => App,
-        enhanceComponent: (Component) => Component,
-      })
+    try {
+      ctx.renderPage = () =>
+        originalRenderPage({
+          enhanceApp: (App) => (props) =>
+            sheet.collectStyles(<App {...props} />),
+        })
 
-    const initialProps = await Document.getInitialProps(ctx)
-
-    return initialProps
+      const initialProps = await Document.getInitialProps(ctx)
+      return {
+        ...initialProps,
+        styles: (
+          <>
+            {initialProps.styles}
+            {sheet.getStyleElement()}
+          </>
+        ),
+      }
+    } finally {
+      sheet.seal()
+    }
   }
 }
-
-export default MyDocument

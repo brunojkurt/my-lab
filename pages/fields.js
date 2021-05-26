@@ -39,7 +39,7 @@ const Fields = () => {
         ))}
       </ul>
     </div>
-  );
+  )
 }
 
-export default Fields;
+export default Fields
