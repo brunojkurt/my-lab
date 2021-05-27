@@ -44,10 +44,6 @@ const Calendar = ({ year = DateTime.now().year, month = DateTime.now().month }) 
 
     setDaysInTheMonth()
   }, [year, month])
-
-  const nextYear = () => {
-
-  }
   
   return (
     <CalendarWrapper
