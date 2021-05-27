@@ -37,7 +37,7 @@ const Calendar = ({ year = DateTime.now().year, month = DateTime.now().month }) 
       const monthStartWeekIndex = Object.entries(weekDays).map(([key, _]) => key).indexOf(monthStartWeekDay)
       const monthEndWeekIndex = Object.entries(weekDays).map(([key, _]) => key).indexOf(monthEndWeekDay)
       const prevTail = [...Array(prev.daysInMonth).keys()].map(x => ({ day: ++x, month: prev.month })).slice(prev.daysInMonth - monthStartWeekIndex, prev.daysInMonth)
-      const nextTail = [...Array(next.daysInMonth).keys()].map(x => ({ day: ++x, month: prev.month })).slice(0, 6 - monthEndWeekIndex)
+      const nextTail = [...Array(next.daysInMonth).keys()].map(x => ({ day: ++x, month: next.month })).slice(0, 6 - monthEndWeekIndex)
       
       setDaysInCurrMonth([...prevTail, ...[...Array(curr.daysInMonth).keys()].map(x => ({ day: ++x, month: curr.month })), ...nextTail])
     }
