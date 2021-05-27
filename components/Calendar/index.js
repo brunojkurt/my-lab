@@ -1,26 +1,22 @@
 import { useEffect, useRef, useState } from 'react'
 import { DateTime } from 'luxon'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-const Calendar = () => {
+const Calendar = ({ year = DateTime.now().year, month = DateTime.now().month }) => {
   const today = DateTime.now()
   const [daysInCurrMonth, setDaysInCurrMonth] = useState([])
-  //const [selDay, setSelDay] = useState(today.day)
-  const [yearMonth, setYearMonth] = useState({
-    month: today.month,
-    year: today.year,
-  })
-  const [yearMonthWeek, setYearMonthWeek] = useState({
-    monthStarts: DateTime.local(today.year, today.month, today.day).weekdayLong,
-    monthEnds: DateTime.local(today.year, today.month, today.daysInMonth).weekdayLong
-  })
-  const [dayCubeMeasures, setDayCubeMeasures] = useState({ width: 0 })
+  const [gridMeasures, setGridMeasures] = useState({ width: 0, height: 0, gap: 1, headerHeight: 30 })
   const wrapper = useRef(null)
 
   useEffect(() => {
     const calcMeasures = () => {
       const wrapperWidth = wrapper.current.offsetWidth
-      setDayCubeMeasures(measure => ({ ...measure, width: wrapperWidth / 7 }))  
+      const wrapperHeight = wrapper.current.offsetHeight
+      setGridMeasures(measures => ({
+        ...measures,
+        width: wrapperWidth / 7,
+        height: (wrapperHeight - measures.headerHeight - (measures.gap * 5)) / 6
+      }))  
     }
 
     if (wrapper.current) {
@@ -33,30 +29,41 @@ const Calendar = () => {
 
   useEffect(() => {
     const setDaysInTheMonth = () => {
-      const d = DateTime.local(yearMonth.year, yearMonth.month)
-      const monthStartWeekDay = DateTime.local(d.year, d.month, d.day).weekdayLong
-      const monthEndWeekDay = DateTime.local(d.year, d.month, d.daysInMonth).weekdayLong
+      const curr = DateTime.local(year, month)
+      const prev = DateTime.local(curr.month === 1 ? curr.year - 1 : curr.year, curr.month === 1 ? 12 : curr.month - 1)
+      const next = DateTime.local(curr.month === 12 ? curr.year + 1 : curr.year, curr.month === 12 ? 1 : curr.month + 1)
+      const monthStartWeekDay = DateTime.local(curr.year, curr.month, curr.day).weekdayLong
+      const monthEndWeekDay = DateTime.local(curr.year, curr.month, curr.daysInMonth).weekdayLong
       const monthStartWeekIndex = Object.entries(weekDays).map(([key, _]) => key).indexOf(monthStartWeekDay)
       const monthEndWeekIndex = Object.entries(weekDays).map(([key, _]) => key).indexOf(monthEndWeekDay)
-      console.log(monthStartWeekIndex, monthEndWeekIndex)
-      setDaysInCurrMonth([...Array(d.daysInMonth).keys()].map(x => ++x))
+      const prevTail = [...Array(prev.daysInMonth).keys()].map(x => ({ day: ++x, month: prev.month })).slice(prev.daysInMonth - monthStartWeekIndex, prev.daysInMonth)
+      const nextTail = [...Array(next.daysInMonth).keys()].map(x => ({ day: ++x, month: prev.month })).slice(0, 6 - monthEndWeekIndex)
+      
+      setDaysInCurrMonth([...prevTail, ...[...Array(curr.daysInMonth).keys()].map(x => ({ day: ++x, month: curr.month })), ...nextTail])
     }
 
     setDaysInTheMonth()
-  }, [yearMonth])
+  }, [year, month])
+
+  const nextYear = () => {
+
+  }
   
   return (
     <CalendarWrapper
       ref={wrapper}
-      width={dayCubeMeasures.width}>
+      cubeWidth={gridMeasures.width}
+      cubeHeight={gridMeasures.height}
+      cubeGap={gridMeasures.gap}>
       { Object.entries(weekDays).map(([key, obj]) => (
         <WeekDay key={key}>{obj.label}</WeekDay>
       )) }
-      { daysInCurrMonth.map((day, index) => (
-        <DayCube key={`${index}-${day}`}>
+      { daysInCurrMonth.map(date => (
+        <DayCube key={`${date.day}-${date.month}`}>
           <CubeHeader>
-            <CubeHeaderLabel curr={today.day === day}>
-              {day}
+            <CubeHeaderLabel
+              curr={today.day === date.day && today.month === date.month}>
+              {date.day}
             </CubeHeaderLabel>
           </CubeHeader>
         </DayCube>
@@ -90,27 +97,44 @@ const weekDays = {
 }
 
 const CalendarWrapper = styled.div`
+  height: 100%;
+  min-height: calc(5 * 140px);
   background-color: #CCC;
-  display: grid;
-  grid-gap: 1px;
-  grid-template-columns: ${({ width }) => `repeat(7, ${width}px)`};
   padding: 1px;
+  display: grid;
+  grid-gap: ${({ cubeGap }) => cubeGap || 1}px;
+  grid-template-rows: ${({ cubeHeight }) => cubeHeight >= 140 ? `
+    30px repeat(auto-fit, minmax(${cubeHeight - 1}px, auto))
+  ` : `
+    30px repeat(5, auto)
+  `};
+  grid-template-columns: ${({ cubeWidth }) => `repeat(7, ${cubeWidth - 1}px)`};
+`
+const fadeInAnimation = css`
+  @keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
 `
 const WeekDay = styled.div`
   padding: 5px;
   font-size: 12px;
   text-align: center;
   background-color: #FFF;
+  ${fadeInAnimation}
+  animation: fadein 300ms;
 `
 const DayCube = styled.div`
   background-color: #FFF;
   padding: 5px;
-  height: 140px;
+  ${fadeInAnimation}
+  animation: fadein 300ms;
 `
 const CubeHeader = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
+  height: 30px;
 `
 const CubeHeaderLabel = styled.div`
   display: flex;
