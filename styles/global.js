@@ -1,8 +1,11 @@
 import { createGlobalStyle } from 'styled-components'
 import antdCss from 'antd/dist/antd.css'
 
+import { Roboto } from './fonts'
+
 const GlobalStyle = createGlobalStyle`
   ${ antdCss }
+  ${ Roboto }
   * {
     margin: 0;
     padding: 0;

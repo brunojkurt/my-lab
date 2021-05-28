@@ -5,6 +5,16 @@ import { InputNumber, Button } from 'antd'
 
 import Calendar from '../components/Calendar'
 
+const schedules = [
+  {
+    id: new Date().getTime() + Math.random(),
+    date: '2021-05-27',
+    time: { start_hour: 9, start_minute: 30, end_hour: 10, end_minute: 0 },
+    daysRange: 19,
+    recurrency: 'daily'
+  }
+]
+
 const Scheduler = () => {
   const today = DateTime.now()
   const [date, setDate] = useState({
@@ -43,7 +53,7 @@ const Scheduler = () => {
         </ControlWrapper>
       </SideControlsWrapper>
       <CalendarWrapper>
-        <Calendar month={date.month} year={date.year} />
+        <Calendar month={date.month} year={date.year} locale="pt-BR" />
       </CalendarWrapper>
     </Screen>
   )
