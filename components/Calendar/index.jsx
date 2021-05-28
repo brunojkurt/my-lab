@@ -26,7 +26,7 @@ const Calendar = ({
   const today = DateTime.now()
 
   const [daysInCurrMonth, setDaysInCurrMonth] = useState([])
-  const [gridMeasures, setGridMeasures] = useState({ width: 0, height: 0, gap: 1, headerHeight: 30 })
+  const [gridMeasures, setGridMeasures] = useState({ width: 0, height: 0, gap: 1, headerHeight: 20 })
   const wrapper = useRef(null)
 
   useEffect(() => {
@@ -84,6 +84,7 @@ const Calendar = ({
   return (
     <CalendarWrapper
       ref={wrapper}
+      headerHeight={gridMeasures.headerHeight}
       cubeWidth={gridMeasures.width}
       cubeHeight={gridMeasures.height}
       cubeGap={gridMeasures.gap}>

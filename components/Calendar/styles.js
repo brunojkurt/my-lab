@@ -7,10 +7,10 @@ export const CalendarWrapper = styled.div`
   padding: 1px;
   display: grid;
   grid-gap: ${({ cubeGap }) => cubeGap || 1}px;
-  grid-template-rows: ${({ cubeHeight }) => cubeHeight >= 140 ? `
-    30px repeat(auto-fit, minmax(${cubeHeight - 1}px, auto))
+  grid-template-rows: ${({ headerHeight, cubeHeight }) => cubeHeight >= 140 ? `
+    ${headerHeight}px repeat(auto-fit, minmax(${cubeHeight - 1}px, auto))
   ` : `
-    30px repeat(5, auto)
+    ${headerHeight}px repeat(5, auto)
   `};
   grid-template-columns: ${({ cubeWidth }) => `repeat(7, ${cubeWidth - 1}px)`};
 `
@@ -21,21 +21,23 @@ const fadeInAnimation = css`
   }
 `
 export const WeekDay = styled.div`
-  padding: 5px;
+  padding-top: 8px;
   font-size: 11px;
   font-weight: 500;
   text-transform: uppercase;
   text-align: center;
   background-color: #FFF;
-  color: rgba(0,0,0,.5);
+  color: #70757a;
   ${fadeInAnimation}
   animation: fadein 300ms;
+  margin-bottom: -1px;
 `
 export const DayCube = styled.div`
   background-color: #FFF;
   padding: 3px;
   ${fadeInAnimation}
   animation: fadein 300ms;
+  contain: strict;
 `
 export const CubeHeader = styled.div`
   width: 100%;
@@ -57,7 +59,7 @@ export const CubeHeaderLabel = styled.div`
   font-weight: 500;
   color: ${({ currDay, currMonth }) => {
     if (currDay) return '#FFF'
-    return currMonth ? 'rgba(0,0,0,.8)' : 'rgba(0,0,0,.5)'
+    return currMonth ? '#3c4043' : '#70757a'
   }};
 
   :hover {
