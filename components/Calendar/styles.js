@@ -2,17 +2,15 @@ import styled, { css } from 'styled-components'
 
 export const CalendarWrapper = styled.div`
   height: 100%;
-  min-height: calc(5 * 140px);
   background-color: #CCC;
   padding: 1px;
   display: grid;
   grid-gap: ${({ cubeGap }) => cubeGap || 1}px;
-  grid-template-rows: ${({ headerHeight, cubeHeight }) => cubeHeight >= 140 ? `
-    ${headerHeight}px repeat(auto-fit, minmax(${cubeHeight - 1}px, auto))
-  ` : `
-    ${headerHeight}px repeat(5, auto)
-  `};
+  grid-template-rows: ${({ headerHeight, cubeHeight }) => `
+    ${headerHeight}px repeat(auto-fit, minmax(${cubeHeight - 1}px, auto))`
+  };
   grid-template-columns: ${({ cubeWidth }) => `repeat(7, ${cubeWidth - 1}px)`};
+  contain: strict;
 `
 const fadeInAnimation = css`
   @keyframes fadein {
