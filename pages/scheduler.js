@@ -8,10 +8,16 @@ import Calendar from '../components/Calendar'
 const schedules = [
   {
     id: new Date().getTime() + Math.random(),
-    date: '2021-05-27',
+    title: 'Daily Plathanus',
+    date: '2021-05-31',
     time: { start_hour: 9, start_minute: 30, end_hour: 10, end_minute: 0 },
-    daysRange: 19,
-    recurrency: 'daily'
+    daysRange: 30,
+    recurrency: 'daily', // daily, weekly, monthly, annually
+    custom_recurrency: {
+      weekdays: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'], // valid just for week frequency unit
+      frequency_unit: 'week', // day, week, month, year
+      frequency_gap: 2
+    }
   }
 ]
 
@@ -53,7 +59,7 @@ const Scheduler = () => {
         </ControlWrapper>
       </SideControlsWrapper>
       <CalendarWrapper>
-        <Calendar month={date.month} year={date.year} locale="pt-BR" />
+        <Calendar month={date.month} year={date.year} locale="pt-BR" schedules={schedules} />
       </CalendarWrapper>
     </Screen>
   )
