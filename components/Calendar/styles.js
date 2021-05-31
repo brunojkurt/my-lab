@@ -41,7 +41,7 @@ export const CubeHeader = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-  height: 30px;
+  height: ${({ height }) => height || 30}px;
 `
 export const CubeHeaderLabel = styled.div`
   height: 24px;
@@ -65,4 +65,31 @@ export const CubeHeaderLabel = styled.div`
     background: ${({ currDay }) => currDay ? '#1967d2' : '#f1f3f4' };
   }
   cursor: pointer;
+`
+export const CubeContent = styled.ul`
+  width: 100%;
+  height: 100%;
+  list-style: circle;
+`
+export const ContentItem = styled.li`
+  display: ${({ visible }) => visible ? 'flex' : 'none'};
+  align-items: center;
+  height: ${({ height }) => height || 23}px;;
+  border-radius: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
+  padding: 0 5px;
+  cursor: pointer;
+  .item_label {
+    font-weight: 500;
+    margin-left: 5px;
+  }
+  .more_items {
+    font-weight: 500;
+  }
+  :hover {
+    background: #f1f3f4;
+  }
 `

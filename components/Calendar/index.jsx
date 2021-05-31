@@ -6,7 +6,9 @@ import {
   DayCube,
   CubeHeader,
   CubeHeaderLabel,
-  WeekDay
+  WeekDay,
+  CubeContent,
+  ContentItem
 } from './styles'
 
 const Calendar = ({
@@ -32,7 +34,14 @@ const Calendar = ({
   const [today, setToday] = useState(DateTime.now())
 
   const [daysInCurrMonth, setDaysInCurrMonth] = useState([])
-  const [gridMeasures, setGridMeasures] = useState({ width: 0, height: 0, gap: 1, headerHeight: 20 })
+  const [gridMeasures, setGridMeasures] = useState({
+    width: 0,
+    height: 0,
+    gap: 1,
+    headerHeight: 20,
+    cubeHeaderHeight: 30,
+    cubeItemHeight: 23
+  })
   const wrapper = useRef(null)
 
   useEffect(() => {
@@ -128,7 +137,6 @@ const Calendar = ({
         const daysDiff = cubeDate.diff(startDate, 'days').toObject().days
         return (daysDiff % customRecurrency.frequency_gap) === 0
       case 'week':
-        console.log(cubeDate.weekday, cubeDate.weekdayLong)
         const cubeWeekStart = cubeDate.startOf('week')
           .plus({ weeks: cubeDate.weekday === 7 ? 1 : 0 }) // needed coz luxon weeks start on monday
         const startDateWeekStart = startDate.startOf('week')
@@ -164,6 +172,26 @@ const Calendar = ({
         isValidOnRecurrencyScope(cubeDate, schdl.start_date, schdl.recurrency, schdl.custom_recurrency)
     })
   }
+
+  const formatMinutes = (minutes) => Number(minutes) < 10 ? `${minutes}0` : minutes
+
+  const itemsPerCube = () => {
+    const contentAvailableArea = gridMeasures.height - gridMeasures.cubeHeaderHeight // padding
+    const itemsQnt = Math.floor(contentAvailableArea / gridMeasures.cubeItemHeight)
+    return itemsQnt < 1 ? itemsQnt : itemsQnt - 1 
+  }
+
+  const moreSchedulesLabel = (locale, qnt) => {
+    console.log(locale, qnt)
+    switch (locale) {
+      case 'en-US':
+        return `${qnt} More`
+      case 'pt-BR':
+        return `Mais ${qnt}`
+      default:
+        return `+ ${qnt}`
+    }
+  }
   
   return (
     <CalendarWrapper
@@ -177,26 +205,44 @@ const Calendar = ({
           {wDay}
         </WeekDay>
       )) }
-      { daysInCurrMonth.map(date => (
-        <DayCube key={`${date.day}-${date.month}`}>
-          <CubeHeader>
-            <CubeHeaderLabel
-              currYear={isCurrentYear(date)}
-              currMonth={isCurrentMonth(date)}
-              currDay={isCurrentDay(date)}>
-              {date.day}
-            </CubeHeaderLabel>
-          </CubeHeader>
-          <ul>
-          { getDaySchedules(date).map(schdl => (
-            <li key={schdl.id}>
-              {`${schdl.title} ${schdl.time.start_hour}:${schdl.time.start_minute} -\ 
-                ${schdl.time.end_hour}:${schdl.time.end_minute}`}
-            </li>
-          )) }
-          </ul>
-        </DayCube>
-      )) }
+      { daysInCurrMonth.map(date => {
+        const daySchedules = getDaySchedules(date)
+        return (
+          <DayCube key={`${date.day}-${date.month}`}>
+            <CubeHeader height={gridMeasures.cubeHeaderHeight}>
+              <CubeHeaderLabel
+                currYear={isCurrentYear(date)}
+                currMonth={isCurrentMonth(date)}
+                currDay={isCurrentDay(date)}>
+                {date.day}
+              </CubeHeaderLabel>
+            </CubeHeader>
+            <CubeContent>
+              { daySchedules.map((schdl, index) => (
+                <ContentItem
+                  key={schdl.id}
+                  height={gridMeasures.cubeItemHeight}
+                  visible={(index + 1) <= itemsPerCube()}>
+                    <span>
+                      {`${schdl.time.start_hour}:${formatMinutes(schdl.time.start_minute)} - \
+                        ${schdl.time.end_hour}:${formatMinutes(schdl.time.end_minute)}`}
+                    </span>
+                    <span className="item_label">{schdl.title}</span>
+                </ContentItem>
+              )) }
+              { daySchedules.length > itemsPerCube() && (
+                <ContentItem
+                  visible={true}
+                  height={gridMeasures.cubeItemHeight}>
+                    <span className="more_items">
+                      { moreSchedulesLabel(locale, daySchedules.length - itemsPerCube()) }
+                    </span>
+                </ContentItem>
+              ) }
+            </CubeContent>
+          </DayCube>
+        )
+      }) }
     </CalendarWrapper>
   )
 }

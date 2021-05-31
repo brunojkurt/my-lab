@@ -18,6 +18,38 @@ const schedules = [
       frequency_unit: 'week', // day, week, month, year
       frequency_gap: 2
     }
+  },
+  {
+    id: new Date().getTime() + Math.random(),
+    title: 'Teste One',
+    date: '2021-05-31',
+    time: { start_hour: 9, start_minute: 30, end_hour: 10, end_minute: 0 },
+    daysRange: 0,
+    recurrency: 'daily' // daily, weekly, monthly, annually
+  },
+  {
+    id: new Date().getTime() + Math.random(),
+    title: 'Teste Two',
+    date: '2021-05-31',
+    time: { start_hour: 9, start_minute: 30, end_hour: 10, end_minute: 0 },
+    daysRange: 0,
+    recurrency: 'daily' // daily, weekly, monthly, annually
+  },
+  {
+    id: new Date().getTime() + Math.random(),
+    title: 'Teste Three',
+    date: '2021-05-31',
+    time: { start_hour: 9, start_minute: 30, end_hour: 10, end_minute: 0 },
+    daysRange: 0,
+    recurrency: 'daily' // daily, weekly, monthly, annually
+  },
+  {
+    id: new Date().getTime() + Math.random(),
+    title: 'Teste Four',
+    date: '2021-05-31',
+    time: { start_hour: 9, start_minute: 30, end_hour: 10, end_minute: 0 },
+    daysRange: 0,
+    recurrency: 'daily' // daily, weekly, monthly, annually
   }
 ]
 
