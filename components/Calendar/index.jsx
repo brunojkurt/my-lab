@@ -177,7 +177,7 @@ const Calendar = ({
   }
 
   const visibleItemsPerCube = () => {
-    const contentAvailableArea = gridMeasures.height - gridMeasures.cubeHeaderHeight // padding
+    const contentAvailableArea = gridMeasures.height - gridMeasures.cubeHeaderHeight
     const itemsQnt = Math.floor(contentAvailableArea / gridMeasures.cubeItemHeight)
     return itemsQnt < 1 ? itemsQnt : itemsQnt - 1 
   }
