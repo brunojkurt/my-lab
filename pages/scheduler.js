@@ -23,7 +23,7 @@ const schedules = [
     id: new Date().getTime() + Math.random(),
     title: 'Teste One',
     date: '2021-05-31',
-    time: { start_hour: 9, start_minute: 30, end_hour: 10, end_minute: 0 },
+    time: { start_hour: 10, start_minute: 30, end_hour: 11, end_minute: 0 },
     daysRange: 0,
     recurrency: 'daily' // daily, weekly, monthly, annually
   },
@@ -31,7 +31,7 @@ const schedules = [
     id: new Date().getTime() + Math.random(),
     title: 'Teste Two',
     date: '2021-05-31',
-    time: { start_hour: 9, start_minute: 30, end_hour: 10, end_minute: 0 },
+    time: { start_hour: 11, start_minute: 0, end_hour: 11, end_minute: 30 },
     daysRange: 0,
     recurrency: 'daily' // daily, weekly, monthly, annually
   },
@@ -39,17 +39,21 @@ const schedules = [
     id: new Date().getTime() + Math.random(),
     title: 'Teste Three',
     date: '2021-05-31',
-    time: { start_hour: 9, start_minute: 30, end_hour: 10, end_minute: 0 },
+    time: { start_hour: 12, start_minute: 0, end_hour: 12, end_minute: 15 },
     daysRange: 0,
     recurrency: 'daily' // daily, weekly, monthly, annually
   },
   {
     id: new Date().getTime() + Math.random(),
     title: 'Teste Four',
-    date: '2021-05-31',
-    time: { start_hour: 9, start_minute: 30, end_hour: 10, end_minute: 0 },
-    daysRange: 0,
-    recurrency: 'daily' // daily, weekly, monthly, annually
+    date: '2021-06-01',
+    time: { start_hour: 13, start_minute: 30, end_hour: 15, end_minute: 0 },
+    daysRange: 30,
+    custom_recurrency: {
+      weekdays: ['wednesday'], // valid just for week frequency unit
+      frequency_unit: 'week', // day, week, month, year
+      frequency_gap: 2
+    }
   }
 ]
 
@@ -91,7 +95,14 @@ const Scheduler = () => {
         </ControlWrapper>
       </SideControlsWrapper>
       <CalendarWrapper>
-        <Calendar month={date.month} year={date.year} locale="pt-BR" schedules={schedules} />
+        <Calendar
+          month={date.month}
+          year={date.year}
+          locale="pt-BR"
+          schedules={schedules}
+          onDayClick={(date, schedules) => console.log(date, schedules)}
+          onScheduleClick={schedule => console.log(schedule)}
+          onNotFittableBtnClick={schedules => console.log(schedules)} />
       </CalendarWrapper>
     </Screen>
   )

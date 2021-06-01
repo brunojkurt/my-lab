@@ -15,7 +15,10 @@ const Calendar = ({
   year = DateTime.now().year,
   month = DateTime.now().month,
   locale = 'en-US',
-  schedules = []
+  schedules = [],
+  onScheduleClick,
+  onDayClick,
+  onNotFittableBtnClick
 }) => {
   LuxonSettings.defaultLocale = locale
 
@@ -173,16 +176,33 @@ const Calendar = ({
     })
   }
 
-  const formatMinutes = (minutes) => Number(minutes) < 10 ? `${minutes}0` : minutes
-
-  const itemsPerCube = () => {
+  const visibleItemsPerCube = () => {
     const contentAvailableArea = gridMeasures.height - gridMeasures.cubeHeaderHeight // padding
     const itemsQnt = Math.floor(contentAvailableArea / gridMeasures.cubeItemHeight)
     return itemsQnt < 1 ? itemsQnt : itemsQnt - 1 
   }
 
-  const moreSchedulesLabel = (locale, qnt) => {
-    console.log(locale, qnt)
+  const handleScheduleClick = (e, schedule) => {
+    e.stopPropagation()
+    if (onScheduleClick) {
+      onScheduleClick(schedule)
+    }
+  }
+
+  const handleDayClick = (date, schedules) => {
+    if (onDayClick) {
+      onDayClick(DateTime.local(date.year, date.month, date.day), schedules)
+    }
+  }
+
+  const handleNotFittableClick = (e, schedules) => {
+    e.stopPropagation()
+    if (onNotFittableBtnClick) {
+      onNotFittableBtnClick(schedules)
+    }
+  }
+
+  const notFittableSchedulesDesc = (locale, qnt) => {
     switch (locale) {
       case 'en-US':
         return `${qnt} More`
@@ -192,6 +212,8 @@ const Calendar = ({
         return `+ ${qnt}`
     }
   }
+
+  const toMinutes = (minutes) => Number(minutes) < 10 ? `0${minutes}` : minutes
   
   return (
     <CalendarWrapper
@@ -208,7 +230,9 @@ const Calendar = ({
       { daysInCurrMonth.map(date => {
         const daySchedules = getDaySchedules(date)
         return (
-          <DayCube key={`${date.day}-${date.month}`}>
+          <DayCube
+            key={`${date.day}-${date.month}`}
+            onClick={() => handleDayClick(date, daySchedules)}>
             <CubeHeader height={gridMeasures.cubeHeaderHeight}>
               <CubeHeaderLabel
                 currYear={isCurrentYear(date)}
@@ -218,24 +242,24 @@ const Calendar = ({
               </CubeHeaderLabel>
             </CubeHeader>
             <CubeContent>
-              { daySchedules.map((schdl, index) => (
-                <ContentItem
-                  key={schdl.id}
-                  height={gridMeasures.cubeItemHeight}
-                  visible={(index + 1) <= itemsPerCube()}>
-                    <span>
-                      {`${schdl.time.start_hour}:${formatMinutes(schdl.time.start_minute)} - \
-                        ${schdl.time.end_hour}:${formatMinutes(schdl.time.end_minute)}`}
-                    </span>
-                    <span className="item_label">{schdl.title}</span>
-                </ContentItem>
+              { daySchedules.map((schdl, pos) => (pos + 1) <= visibleItemsPerCube() && (
+                  <ContentItem
+                    key={schdl.id}
+                    onClick={(e) => handleScheduleClick(e, schdl)}
+                    height={gridMeasures.cubeItemHeight}>
+                      <span>
+                        {`${schdl.time.start_hour}:${toMinutes(schdl.time.start_minute)} - \
+                          ${schdl.time.end_hour}:${toMinutes(schdl.time.end_minute)}`}
+                      </span>
+                      <span className="item_schedule_label">{schdl.title}</span>
+                  </ContentItem>
               )) }
-              { daySchedules.length > itemsPerCube() && (
+              { daySchedules.length > visibleItemsPerCube() && (
                 <ContentItem
-                  visible={true}
+                  onClick={(e) => handleNotFittableClick(e, daySchedules)}
                   height={gridMeasures.cubeItemHeight}>
-                    <span className="more_items">
-                      { moreSchedulesLabel(locale, daySchedules.length - itemsPerCube()) }
+                    <span className="not_fittable_items_label">
+                      { notFittableSchedulesDesc(locale, daySchedules.length - visibleItemsPerCube()) }
                     </span>
                 </ContentItem>
               ) }

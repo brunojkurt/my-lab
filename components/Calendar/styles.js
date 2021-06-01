@@ -72,7 +72,7 @@ export const CubeContent = styled.ul`
   list-style: circle;
 `
 export const ContentItem = styled.li`
-  display: ${({ visible }) => visible ? 'flex' : 'none'};
+  display: flex;
   align-items: center;
   height: ${({ height }) => height || 23}px;;
   border-radius: 3px;
@@ -82,11 +82,11 @@ export const ContentItem = styled.li`
   font-size: 12px;
   padding: 0 5px;
   cursor: pointer;
-  .item_label {
+  .item_schedule_label {
     font-weight: 500;
     margin-left: 5px;
   }
-  .more_items {
+  .not_fittable_items_label {
     font-weight: 500;
   }
   :hover {
