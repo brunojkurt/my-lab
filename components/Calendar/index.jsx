@@ -182,23 +182,23 @@ const Calendar = ({
     return itemsQnt < 1 ? itemsQnt : itemsQnt - 1 
   }
 
-  const handleScheduleClick = (e, schedule) => {
+  const handleScheduleClick = (event, schedule) => {
     e.stopPropagation()
     if (onScheduleClick) {
-      onScheduleClick(schedule)
+      onScheduleClick(schedule, event)
     }
   }
 
-  const handleDayClick = (date, schedules) => {
+  const handleDayClick = (event, date, schedules) => {
     if (onDayClick) {
-      onDayClick(DateTime.local(date.year, date.month, date.day), schedules)
+      onDayClick(DateTime.local(date.year, date.month, date.day), schedules, event)
     }
   }
 
-  const handleNotFittableClick = (e, schedules) => {
+  const handleNotFittableClick = (event, schedules) => {
     e.stopPropagation()
     if (onNotFittableBtnClick) {
-      onNotFittableBtnClick(schedules)
+      onNotFittableBtnClick(schedules, event)
     }
   }
 
@@ -232,8 +232,10 @@ const Calendar = ({
         return (
           <DayCube
             key={`${date.day}-${date.month}`}
-            onClick={() => handleDayClick(date, daySchedules)}>
-            <CubeHeader height={gridMeasures.cubeHeaderHeight}>
+            onClick={(e) => handleDayClick(e, date, daySchedules)}>
+            <CubeHeader
+              onClick={(e) => handleDayClick(e, date, daySchedules)}
+              height={gridMeasures.cubeHeaderHeight}>
               <CubeHeaderLabel
                 currYear={isCurrentYear(date)}
                 currMonth={isCurrentMonth(date)}

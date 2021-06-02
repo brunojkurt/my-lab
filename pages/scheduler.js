@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { InputNumber, Button } from 'antd'
 
 import Calendar from '../components/Calendar'
+import Modal from '../components/Modal'
 
 const schedules = [
   {
@@ -48,11 +49,10 @@ const schedules = [
     title: 'Teste Four',
     date: '2021-06-01',
     time: { start_hour: 13, start_minute: 30, end_hour: 15, end_minute: 0 },
-    daysRange: 30,
+    daysRange: 60,
     custom_recurrency: {
-      weekdays: ['wednesday'], // valid just for week frequency unit
-      frequency_unit: 'week', // day, week, month, year
-      frequency_gap: 2
+      frequency_unit: 'month', // day, week, month, year
+      frequency_gap: 1
     }
   }
 ]
@@ -63,6 +63,15 @@ const Scheduler = () => {
     month: today.month,
     year: today.year
   })
+  const [dayModalData, setDayModalData] = useState(null)
+
+  const handleDaySelect = (schedules, event) => {
+    setDayModalData({
+      position: { top: event.clientY, left: event.clientX },
+      schedules
+    })
+  }
+
   return (
     <Screen>
       <SideControlsWrapper>
@@ -100,10 +109,22 @@ const Scheduler = () => {
           year={date.year}
           locale="pt-BR"
           schedules={schedules}
-          onDayClick={(date, schedules) => console.log(date, schedules)}
-          onScheduleClick={schedule => console.log(schedule)}
-          onNotFittableBtnClick={schedules => console.log(schedules)} />
+          onDayClick={(date, schedules, event) => handleDaySelect(schedules, event)}
+          onScheduleClick={(schedule, event) => console.log(schedule, event)}
+          onNotFittableBtnClick={(schedules, event) => console.log(schedules, event)} />
       </CalendarWrapper>
+      <Modal
+        show={dayModalData}
+        position={dayModalData?.position || null}
+        onClose={() => setDayModalData(null)}>
+          <ul style={{ listStyle: 'none' }}>
+            { dayModalData && !!dayModalData.schedules.length ? (
+              dayModalData.schedules.map(schdl => (
+                <li key={schdl.id}>{schdl.title}</li>
+              ))
+            ) : <h5>Nenhum agendamento</h5> }
+          </ul>
+      </Modal>
     </Screen>
   )
 }
