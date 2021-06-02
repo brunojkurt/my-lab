@@ -23,7 +23,7 @@ export const ModalPaper = styled.div`
               0px 24px 38px 3px rgb(0 0 0 / 14%),
               0px 9px 46px 8px rgb(0 0 0 / 12%);
   ${fadeInAnimation}
-  animation: fadein 300ms;
+  animation: fadein 200ms;
 
   width: 100%;
   height: auto;
