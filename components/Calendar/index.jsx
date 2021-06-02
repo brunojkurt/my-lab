@@ -183,7 +183,7 @@ const Calendar = ({
   }
 
   const handleScheduleClick = (event, schedule) => {
-    e.stopPropagation()
+    event.stopPropagation()
     if (onScheduleClick) {
       onScheduleClick(schedule, event)
     }
@@ -196,7 +196,7 @@ const Calendar = ({
   }
 
   const handleNotFittableClick = (event, schedules) => {
-    e.stopPropagation()
+    event.stopPropagation()
     if (onNotFittableBtnClick) {
       onNotFittableBtnClick(schedules, event)
     }
