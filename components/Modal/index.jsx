@@ -1,7 +1,8 @@
 import ClickAway from '../ClickAway'
 import { ModalPaper, ModalHeader, ModalContent, ModalFooter, ModalWrapper } from './styles'
 
-const Modal = ({ header, children, footer, size, show, onClose, position }) => {
+const Modal = (props) => {
+  const { header, children, footer, show, size, position, onClose } = props
   return show ? (
     <ModalWrapper position={position}>
       <ClickAway customWrapper={ModalPaper}
