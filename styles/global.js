@@ -7,12 +7,12 @@ const GlobalStyle = createGlobalStyle`
   ${ antdCss }
   ${ Roboto }
   * {
-    margin: 0;
-    padding: 0;
-    outline: 0;
     box-sizing: border-box;
   }
   html, body, #__next {
+    margin: 0;
+    padding: 0;
+    outline: 0;
     height: 100%;
   }
   body, input, button {
