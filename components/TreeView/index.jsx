@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import {
   TreeListWrapper,
   CollapsableListWrapper,
@@ -22,18 +22,22 @@ import {
 import { IoMdClose } from 'react-icons/io'
 
 const TreeView = ({ data, onItemClick, onAddClick, onRemoveClick }) => {
+  const newFieldRef = useRef(null)
   const [collapsedLists, setCollapsedLists] = useState([])
-  const [newItem, setNewItem] = useState(null)
-  const [newItemValue, setNewItemValue] = useState('')
+  const [newItemParent, setnewItemParent] = useState(null)
 
   const toggleList = (itemId) => {
     setCollapsedLists(list => list.includes(itemId) ? list.filter(i => i !== itemId) : [...list, itemId])
   }
 
-  const handleAddClick = (e, item) => {
+  const handleNewClick = (e, item) => {
     e.stopPropagation()
-    setNewItem(item.id)
-    setNewItemValue('')
+    setnewItemParent(item.id)
+  }
+
+  const handleAddClick = () => {
+    onAddClick({ parent: newItemParent, text: newFieldRef.current.value })
+    setnewItemParent(null)
   }
 
   const handleRemoveClick = (e, item) => {
@@ -82,31 +86,33 @@ const TreeView = ({ data, onItemClick, onAddClick, onRemoveClick }) => {
           {(onAddClick || onRemoveClick) && (
             <ActionsWrapper>
               { onAddClick && (
-                <ListItemBtn onClick={(e) => handleAddClick(e, item)}>
+                <ListItemBtn
+                  onClick={(e) => handleNewClick(e, item)}
+                  visibleOnListHover
+                >
                   <HiOutlinePlusSm />
                 </ListItemBtn>
               )}
               { onRemoveClick && (
-                <ListItemBtn color="#eb4034" onClick={(e) => handleRemoveClick(e, item)}>
+                <ListItemBtn
+                  color="#eb4034"
+                  onClick={(e) => handleRemoveClick(e, item)}
+                  visibleOnListHover
+                >
                   <HiOutlineTrash />
                 </ListItemBtn>
               )}
             </ActionsWrapper>
           )}
         </StyledListItem>
-        {newItem === item.id && (
+        {newItemParent === item.id && (
           <FieldWrapper>
-            <InputField
-              value={newItemValue}
-              onChange={(e) => setNewItemValue(e.target.value)}
-            />
+            <InputField ref={newFieldRef} />
             <InputControlsWrapper>
-              {!!newItemValue.length && (
-                <ListItemBtn>
-                  <HiOutlineCheck />
-                </ListItemBtn>
-              )}
-              <ListItemBtn onClick={() => setNewItem(null)}>
+              <ListItemBtn onClick={() => handleAddClick()}>
+                <HiOutlineCheck />
+              </ListItemBtn>
+              <ListItemBtn onClick={() => setnewItemParent(null)}>
                 <IoMdClose />
               </ListItemBtn>
             </InputControlsWrapper>
