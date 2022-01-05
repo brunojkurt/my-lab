@@ -16,10 +16,16 @@ const CharsSubsequence = () => {
     subsequences: 0
   })
 
-  function countSubsequences(ptn, str, ptnSize, strSize) {
-    if (ptn[ptnSize - 1] === str[strSize - 1]) {
+  function countSubsequences(pattern, string, patternSize, stringSize) {
+    if (stringSize === 0)
       return 0
-    }
+
+    if (patternSize === 0)
+      return 1
+
+    return (pattern[patternSize - 1] === string[stringSize - 1] ?
+      countSubsequences(pattern, string, patternSize - 1, stringSize - 1) : 0) +
+      countSubsequences(pattern, string, patternSize, stringSize - 1)
   }
 
   const getSubsequencesCount = () => {
@@ -29,7 +35,7 @@ const CharsSubsequence = () => {
 
   useEffect(() => {
     if (state.pattern.length === 3) {
-      getSubsequencesCount()
+      console.log(getSubsequencesCount())
     } else {
       setState(state => ({
         ...state,
