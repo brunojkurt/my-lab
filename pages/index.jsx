@@ -23,6 +23,9 @@ const Home = () => {
           <Link href="/auto_increment_fields">auto_increment_fields</Link>
         </li>
         <li>
+          <Link href="/swiper">swiper</Link>
+        </li>
+        <li>
           <Link href="/chars_subsequence">chars_subsequence</Link>
         </li>
       </ul>

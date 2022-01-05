@@ -1,0 +1,46 @@
+{
+  "users": [
+    {
+      "id": "123",
+      "text": "Bruno"
+    },
+    {
+      "id": "321",
+      "text": "React",
+      "parent": "123"
+    },
+    {
+      "id": "999",
+      "text": "Artur"
+    },
+    {
+      "id": "456",
+      "text": "React",
+      "parent": "999"
+    },
+    {
+      "id": "789",
+      "text": "Node",
+      "parent": "999"
+    },
+    {
+      "id": "1010",
+      "text": "Rafael Pancinha"
+    },
+    {
+      "id": "8888",
+      "text": "React Native",
+      "parent": "1010"
+    },
+    {
+      "id": "666",
+      "text": "Node",
+      "parent": "1010"
+    },
+    {
+      "id": "16516",
+      "text": "Rocketseat",
+      "parent": "666"
+    }
+  ]
+}
