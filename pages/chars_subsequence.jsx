@@ -12,16 +12,16 @@ const Container = styled.div`
 const CharsSubsequence = () => {
   const [state, setState] = useState({
     pattern: 'SUE',
-    string: 'SUBSEQUENCE',
-    subsequences: 0
+    string: 'SUBSEQUENCE'
   })
+  const [subsequences, setSubsequences] = useState(0)
 
   function countSubsequences(pattern, string, patternSize, stringSize) {
-    if (stringSize === 0)
-      return 0
-
     if (patternSize === 0)
       return 1
+      
+    if (stringSize === 0)
+      return 0
 
     return (pattern[patternSize - 1] === string[stringSize - 1] ?
       countSubsequences(pattern, string, patternSize - 1, stringSize - 1) : 0) +
@@ -34,13 +34,10 @@ const CharsSubsequence = () => {
   }
 
   useEffect(() => {
-    if (state.pattern.length === 3) {
-      console.log(getSubsequencesCount())
+    if (state.pattern.length) {
+      setSubsequences(getSubsequencesCount())
     } else {
-      setState(state => ({
-        ...state,
-        subsequences: 0
-      }))
+      setSubsequences(0)
     }
   }, [state])
 
@@ -48,20 +45,16 @@ const CharsSubsequence = () => {
     <Container>
       <Input
         placeholder='Pattern'
-        maxLength={3}
         value={state.pattern}
         onChange={({ target: { value }}) => setState(state => ({ ...state, pattern: value }))}
       />
-      {state.pattern.length !== 3 && (
-        <small style={{ color: 'red' }}>Pattern must have 3 chars</small>
-      )}
       <Input
         placeholder='String'
         value={state.string}
         style={{ marginTop: 15 }}
         onChange={({ target: { value }}) => setState(state => ({ ...state, string: value }))}
       />
-      {`Subsequences: ${state.subsequences}`}
+      {`Subsequences: ${subsequences}`}
     </Container>
   )
 }
