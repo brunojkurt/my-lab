@@ -1,63 +1,61 @@
-import React, { useRef, useState, useEffect } from 'react'
-import { Content as TooltipContent, ChildWrapper } from './styles'
+import { useEffect, useState } from 'react'
+import styled from 'styled-components'
 
-const Tooltip = ({ children, content, placement = 'right' }) => {
-  const [position, setPosition] = useState({
-    top: 0,
-    left: 0
-  })
-  const [show, setShow] = useState(false)
-  const childrenRef = useRef(null)
-  const contentRef = useRef(null)
+const Tooltip = ({ position = { x: 0, y: 0 }, anchorEl, title, content, show }) => {
+  const [coordinates, setCoordinates] = useState(position)
 
   useEffect(() => {
-    const calcPosition = () => {
-      const childrenRect = childrenRef.current.getBoundingClientRect()
-      const docHeight = document.documentElement.clientHeight
-      const docWidth = document.documentElement.clientWidth
-      const margin = 3
-
-      switch (placement) {
-        case 'top':
-          setPosition({ bottom: docHeight - childrenRect.top + margin, left: childrenRect.left })
-          break
-        case 'bottom':
-          setPosition({ top: childrenRect.bottom + margin, left: childrenRect.left })
-          break
-        case 'left':
-          setPosition({ top: childrenRect.top, right: docWidth - childrenRect.left + margin })
-          break
-        case 'right':
-          setPosition({ top: childrenRect.top, left: childrenRect.right + margin })
-          break
-        default:
-          setPosition({ bottom: docHeight - childrenRect.top + margin, left: childrenRect.left })
-          break
+    const getCoordinates = () => {
+      if (!anchorEl) return position
+      const rect = anchorEl.getBoundingClientRect()
+      return {
+        x: rect.x + (rect.width / 2),
+        y: rect.y
       }
     }
 
-    if (childrenRef.current && contentRef.current) {
-      calcPosition()
-    }
+    const coordinatesAxis = getCoordinates()
 
-  }, [childrenRef, contentRef, placement])
+    setCoordinates(coordinatesAxis)
+  }, [])
 
   return (
-    <>
-      <ChildWrapper
-        ref={childrenRef}
-        onMouseOver={() => setShow(true)}
-        onMouseLeave={() => setShow(false)}>
-          {children}
-      </ChildWrapper>
-      <TooltipContent
-        ref={contentRef}
-        position={position}
-        show={show}>
-        { content }
-      </TooltipContent>
-    </>
+    <Container show={show} coordinates={coordinates}>
+      <Title>
+        {title || 'Comment'}
+      </Title>
+      <Content>
+        {content}
+      </Content>
+    </Container>
   )
 }
+
+const Container = styled.div`
+  opacity: ${({ show }) => show ? 1 : 0};
+  transition: all 300ms ease;
+  min-width: 120px;
+  max-width: 200px;
+  min-height: 80px;
+  border-radius: 8px;
+  background: #FFF;
+  border: 1px solid #000;
+  position: absolute;
+  top: ${({ coordinates }) => coordinates.y}px;
+  left: ${({ coordinates }) => coordinates.x}px;
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% - 10px));
+`
+const Title = styled.div`
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  border-bottom: 1px solid #000;
+`
+
+const Content = styled.div`
+  padding: 10px;
+  font-size: 12px;
+`
 
 export default Tooltip

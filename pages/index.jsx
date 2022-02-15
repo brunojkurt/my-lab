@@ -28,6 +28,9 @@ const Home = () => {
         <li>
           <Link href="/chars_subsequence">chars_subsequence</Link>
         </li>
+        <li>
+          <Link href="/text_comments">markup text comments</Link>
+        </li>
       </ul>
     </div>
   )
