@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-const Tooltip = ({ position = { x: 0, y: 0 }, anchorEl, title, content, show }) => {
-  const [coordinates, setCoordinates] = useState(position)
+const DEFAULT_POSITION = { x: 0, y: 0 }
+
+const Tooltip = ({ position = DEFAULT_POSITION, anchorEl, title, content, show }) => {
+  const [coordinates, setCoordinates] = useState(DEFAULT_POSITION)
 
   useEffect(() => {
     const getCoordinates = () => {
-      if (!anchorEl) return position
+      if (!anchorEl) {
+        return DEFAULT_POSITION
+      }
       const rect = anchorEl.getBoundingClientRect()
       return {
         x: rect.x + (rect.width / 2),
@@ -17,7 +21,7 @@ const Tooltip = ({ position = { x: 0, y: 0 }, anchorEl, title, content, show }) 
     const coordinatesAxis = getCoordinates()
 
     setCoordinates(coordinatesAxis)
-  }, [])
+  }, [position, anchorEl])
 
   return (
     <Container show={show} coordinates={coordinates}>

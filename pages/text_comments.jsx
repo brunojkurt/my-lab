@@ -9,10 +9,6 @@ const MarkupComments = () => {
   const [comments, setComments] = useState([])
   const [displayedComment, setDisplayedComment] = useState(null)
 
-  const handleCommentOver = (id) => setDisplayedComment(id)
-
-  const handleCommentOut = () => setDisplayedComment(null)
-
   useEffect(() => {
     const containerEl = markupContainerRef.current
     if (containerEl) {
@@ -28,13 +24,13 @@ const MarkupComments = () => {
 
   useEffect(() => {
     if (comments?.length) {
-      comments.forEach(({ id, anchorEl }) => anchorEl.addEventListener('mouseover', () => handleCommentOver(id)))
-      comments.forEach(({ id, anchorEl }) => anchorEl.addEventListener('mouseout', () => handleCommentOut(id)))
+      comments.forEach(({ id, anchorEl }) => anchorEl.addEventListener('mouseover', () => setDisplayedComment(id)))
+      comments.forEach(({ id, anchorEl }) => anchorEl.addEventListener('mouseout', () => setDisplayedComment(null)))
     }
 
     return () => {
-      comments.forEach(({ id, anchorEl }) => anchorEl.removeEventListener('mouseover', () => handleCommentOver(id)))
-      comments.forEach(({ id, anchorEl }) => anchorEl.removeEventListener('mouseout', () => handleCommentOut(id)))
+      comments.forEach(({ id, anchorEl }) => anchorEl.removeEventListener('mouseover', () => setDisplayedComment(id)))
+      comments.forEach(({ id, anchorEl }) => anchorEl.removeEventListener('mouseout', () => setDisplayedComment(null)))
     }
   }, [comments])
 
