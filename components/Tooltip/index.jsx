@@ -12,15 +12,17 @@ const Tooltip = ({ position = DEFAULT_POSITION, anchorEl, title, content, show }
         return DEFAULT_POSITION
       }
       const rect = anchorEl.getBoundingClientRect()
-      return {
+      setCoordinates({
         x: rect.x + (rect.width / 2),
         y: rect.y
-      }
+      })
     }
 
-    const coordinatesAxis = getCoordinates()
+    window.addEventListener('scroll', getCoordinates())
 
-    setCoordinates(coordinatesAxis)
+    return () => {
+      window.removeEventListener('scroll', getCoordinates())
+    }
   }, [position, anchorEl])
 
   return (
