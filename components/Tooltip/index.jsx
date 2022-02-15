@@ -18,10 +18,12 @@ const Tooltip = ({ position = DEFAULT_POSITION, anchorEl, title, content, show }
       })
     }
 
-    window.addEventListener('scroll', getCoordinates())
+    getCoordinates()
+
+    window.addEventListener('scroll', getCoordinates)
 
     return () => {
-      window.removeEventListener('scroll', getCoordinates())
+      window.removeEventListener('scroll', getCoordinates)
     }
   }, [position, anchorEl])
 
@@ -46,7 +48,7 @@ const Container = styled.div`
   border-radius: 8px;
   background: #FFF;
   border: 1px solid #000;
-  position: absolute;
+  position: fixed;
   top: ${({ coordinates }) => coordinates.y}px;
   left: ${({ coordinates }) => coordinates.x}px;
   pointer-events: none;
