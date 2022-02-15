@@ -1,10 +1,9 @@
 import { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
-import markup from '../data/markup_data'
 
-import Tooltip from '../components/Tooltip'
+import Tooltip from '../Tooltip'
 
-const MarkupComments = () => {
+const Correction = ({ markup, image }) => {
   const markupContainerRef = useRef(null)
   const [comments, setComments] = useState([])
   const [displayedComment, setDisplayedComment] = useState(null)
@@ -36,7 +35,10 @@ const MarkupComments = () => {
 
   return (
     <Container>
-      <div
+      {image && (
+        <CorrectionImage src={image} />
+      )}
+      <CorrectionMarkup
         ref={markupContainerRef}
         dangerouslySetInnerHTML={{ __html: markup }}
       />
@@ -53,20 +55,38 @@ const MarkupComments = () => {
   )
 }
 
+const CorrectionImage = styled.img`
+  width: 100%;
+  height: 100%;
+`
+
+const CorrectionMarkup = styled.div`
+  position: absolute;
+  width: 100%;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+`
+
 const Container = styled.div`
   width: 100%;
   margin-left: auto;
   margin-right: auto;
   max-width: 1100px;
   min-height: 700px;
-  background: #f4f4f4;
   margin-top: 80px;
   padding: 15px;
   font-size: 21px;
+  position: relative;
 
   > div {
     span {
       cursor: help;
+      &.mark {
+        position: absolute;
+        opacity: 0.5;
+      }
     }
 
     .erro-comentario {
@@ -106,4 +126,4 @@ const Container = styled.div`
   }
 `
 
-export default MarkupComments
+export default Correction

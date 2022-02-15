@@ -29,7 +29,7 @@ const Home = () => {
           <Link href="/chars_subsequence">chars_subsequence</Link>
         </li>
         <li>
-          <Link href="/text_comments">markup text comments</Link>
+          <Link href="/correction_example">correction examples</Link>
         </li>
       </ul>
     </div>
