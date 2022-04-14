@@ -43,12 +43,11 @@ const useValidator = (fields = []) => {
       validationName: typeof fn === 'function' ? fn.name : fn,
       valid: validateField(fn, value)
     }))
-
-    console.log(offenses)
+    .filter(({ valid }) => !valid)
 
     return ({
       name,
-      offenses: offenses.filter(({ valid }) => !valid).map(({ validationName }) => validationName)
+      offenses: offenses.map(({ validationName }) => validationName)
     })
   })
 
