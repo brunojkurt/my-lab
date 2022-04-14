@@ -31,6 +31,9 @@ const Home = () => {
         <li>
           <Link href="/correction_example">correction examples</Link>
         </li>
+        <li>
+          <Link href="/validation">validation</Link>
+        </li>
       </ul>
     </div>
   )
