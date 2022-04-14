@@ -12,7 +12,7 @@ const useValidator = (fields = []) => {
     return typeof value === 'number' ? value >= min : String(value).length >= min
   }
 
-  const validationsFunctions = {
+  const validationFunctions = {
     required,
     max,
     min
@@ -26,10 +26,10 @@ const useValidator = (fields = []) => {
     const [fn, ...args] = validation.split(':')
 
     if(!!args.length) {
-      return validationsFunctions[fn](value, args)
+      return validationFunctions[fn](value, args)
     }
 
-    return validationsFunctions[fn](value)
+    return validationFunctions[fn](value)
   }
 
   const validators = (validation) => {
